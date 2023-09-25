@@ -1,0 +1,594 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Hurricane Image Analysis Viewer  (HIAV)</title>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css' rel='stylesheet'>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script type='text/javascript' src='js/ajax.js?a=6'></script>
+    <style>::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .card {
+        border: none;
+        overflow: hidden
+    }
+
+    .thumbnail_images ul {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        margin-top: 10px
+    }
+
+    .thumbnail_images ul li {
+        margin: 5px;
+        padding: 10px;
+        border: 2px solid #eee;
+        cursor: pointer;
+        transition: all 0.5s
+    }
+
+    .images tr:hover {
+        border: 2px solid #000;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .active {
+        border: 2px solid #000 !important;
+    }
+
+    .main_image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        width: 100%;
+        overflow: hidden
+    }
+
+    .heart {
+        height: 29px;
+        width: 29px;
+        background-color: #eaeaea;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center
+    }
+
+    .content p {
+        font-size: 12px
+    }
+
+    .ratings span {
+        font-size: 14px;
+        margin-left: 12px
+    }
+
+    .colors {
+        margin-top: 5px
+    }
+
+    .colors ul {
+        list-style: none;
+        display: flex;
+        padding-left: 0px
+    }
+
+    .colors ul li {
+        height: 20px;
+        width: 20px;
+        display: flex;
+        border-radius: 50%;
+        margin-right: 10px;
+        cursor: pointer
+    }
+
+    .colors ul li:nth-child(1) {
+        background-color: #6c704d
+    }
+
+    .colors ul li:nth-child(2) {
+        background-color: #96918b
+    }
+
+    .colors ul li:nth-child(3) {
+        background-color: #68778e
+    }
+
+    .colors ul li:nth-child(4) {
+        background-color: #263f55
+    }
+
+    .colors ul li:nth-child(5) {
+        background-color: black
+    }
+
+    .right-side {
+        position: relative
+    }
+
+    .search-option {
+        position: absolute;
+        background-color: #000;
+        overflow: hidden;
+        align-items: center;
+        color: #fff;
+        width: 200px;
+        height: 200px;
+        border-radius: 49% 51% 50% 50% / 68% 69% 31% 32%;
+        left: 30%;
+        bottom: -250px;
+        transition: all 0.5s;
+        cursor: pointer
+    }
+
+    .search-option .first-search {
+        position: absolute;
+        top: 20px;
+        left: 90px;
+        font-size: 20px;
+        opacity: 1000
+    }
+
+    .search-option .inputs {
+        opacity: 0;
+        transition: all 0.5s ease;
+        transition-delay: 0.5s;
+        position: relative
+    }
+
+    .search-option .inputs input {
+        position: absolute;
+        top: 200px;
+        left: 30px;
+        padding-left: 20px;
+        background-color: transparent;
+        width: 300px;
+        border: none;
+        color: #fff;
+        border-bottom: 1px solid #eee;
+        transition: all 0.5s;
+        z-index: 10
+    }
+
+    .search-option .inputs input:focus {
+        box-shadow: none;
+        outline: none;
+        z-index: 10
+    }
+
+    .search-option:hover {
+        border-radius: 0px;
+        width: 100%;
+        left: 0px
+    }
+
+    .search-option:hover .inputs {
+        opacity: 1
+    }
+
+    .search-option:hover .first-search {
+        left: 27px;
+        top: 25px;
+        font-size: 15px
+    }
+
+    .search-option:hover .inputs input {
+        top: 20px
+    }
+
+    .search-option .share {
+        position: absolute;
+        right: 20px;
+        top: 22px
+    }
+
+    .snippet-body {
+        height: 100%;
+        overflow-x: hidden;
+        min-height: 1600px;
+    }
+
+    h3 {
+        margin-top:20px !important;
+        margin-bottom:20px !important;
+    }
+
+    .buttons .btn {
+        height: 50px;
+        width: 150px;
+        border-radius: 0px !important
+    }</style>
+</head>
+<body class='snippet-body'>
+<div class="container">
+    <h1 class="d-flex justify-content-center" style="font-size: 58px; font-family: Arial; font-weight: bold;">Hurricane Image Analysis Viewer(HIAV)</h1>
+</div>
+<div class="row mt-5 mb-5">
+    <div class="card">
+        <div class="col-md-12 px-5">
+            <h1>Data Filter</h1>
+            <form action="#">
+                <div class="row gx-3 gy-2 align-items-center">
+                    <h3>A. General Building Information</h3>
+                    <div class="col-sm-3">
+                        <label for="address">Address</label>
+                        <input name="street_address_full" type="text" class="form-control" id="address">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="numberofstories">Number Of Stories</label>
+                        <select name="number_of_stories" class="form-select" id="numberofstories">
+                            <option value="">select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5 or more</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="attgarage">Attached Garage</label>
+                        <select name="attached_garage" class="form-select" id="attgarage">
+                            <option value="">select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="buildinguse">Building Use</label>
+                        <select name="building_use" class="form-select" id="buildinguse">
+                            <option value="">select</option>
+                            <option value="Single Family">Single Family</option>
+                            <option value="Multi-Family">Multi-Family</option>
+                            <option value="Business">Business</option>
+                            <option value="Hotel">Hotel</option>
+                            <option value="Industrial">Industrial</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="roofshape">Roof Shape</label>
+                        <select name="roof_shape" class="form-select" id="roofshape">
+                            <option value="">select</option>
+                            <option value="Complex">Complex</option>
+                            <option value="Flat">Flat</option>
+                            <option value="Flat,Hip">Flat,Hip</option>
+                            <option value="Gable">Gable</option>
+                            <option value="Gable,Complex">Gable,Complex</option>
+                            <option value="Gable,Hip">Gable,Hip</option>
+                            <option value="Gambrel">Gambrel</option>
+                            <option value="Hip">Hip</option>
+                            <option value="Hip,Gable">Hip,Gable</option>
+                        </select>
+                </div>
+
+                    <div class="col-sm-3">
+                        <label for="roofcoverformat">Roof Cover Format</label>
+                        <select name="roof_cover_format" class="form-select" id="roofcoverformat">
+                            <option value="">select</option>
+                            <option value="Continuous Surface">Continuous Surface</option>
+                            <option value="Panels">Panels</option>
+                            <option value="Shingles">Shingles</option>
+                            <option value="Tiles">Tiles</option>
+                        </select>
+                </div>
+                    
+                    <div class="col-sm-3">
+                        <label for="roofcovermaterial">Roof Cover Material</label>
+                        <select name="roof_cover_material" class="form-select" id="roofcovermaterial">
+                            <option value="">select</option>
+                            <option value="Asphalt">Asphalt</option>
+                            <option value="Clay">Clay</option>
+                            <option value="Metal">Metal</option>
+                            <option value="Reinforced Concrete">Reinforced Concrete</option>
+                            <option value="Wood">Wood</option>
+                        </select>
+                </div>
+
+                    <div class="col-sm-3">
+                        <label for="roofframing">Roof Framing</label>
+                        <select name="roof_framing" class="form-select" id="roofframing">
+                            <option value="">select</option>
+                            <option value="CF Steel">CF Steel</option>
+                            <option value="Metal Joist">Metal Joist</option>
+                            <option value="Structural Steel">Structural Steel</option>
+                            <option value="Wood">Wood</option>
+                        </select>
+                </div>
+
+                    <div class="col-sm-3">
+                        <label for="structuralwall">Structural wall</label>
+                        <select name="structural_wall" class="form-select" id="structuralwall">
+                            <option value="">select</option>
+                            <option value="CF Steel">CF Steel</option>
+                            <option value="Concrete">Concrete</option>
+                            <option value="LB Masonry">LB Masonry</option>
+                            <option value="RC">RC</option>
+                            <option value="Structural Steel">Structural Steel</option>
+                            <option value="Wood Frame">Wood Frame</option>
+                        </select>
+                </div>
+
+                    <div class="col-sm-3">
+                        <label for="wallcovercladding">Wall covercladding</label>
+                        <select name="wall_covercladding" class="form-select" id="wallcovercladding">
+                            <option value="">select</option>
+                            <option value="Brick Veneer">Brick Veneer</option>
+                            <option value="Curtain Wall">Curtain Wall</option>
+                            <option value="Hardie Board Siding">Hardie Board Siding</option>
+                            <option value="Metal">Metal</option>
+                            <option value="Stucco">Stucco</option>
+                            <option value="Vinyl Siding">Vinyl Siding</option>
+                            <option value="Wood Siding">Wood Siding</option>    
+                        </select>
+                </div>
+
+                    <div class="col-sm-3">
+                        <label for="structelavated">Structure Elevated</label>
+                        <select name="structure_elevated" class="form-select" id="structelavated">
+                            <option value="">select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="shutterstorm">Shuttersstorm panels</label>
+                        <select name="shuttersstorm_panels" class="form-select" id="shutterstorm">
+                            <option value="">select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="hurricaneclips">Hurricane clips</label>
+                        <select name="hurricane_clips" class="form-select" id="hurricaneclips">
+                            <option value="">select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            <option value="n/a">n/a</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="damagecause">Damage cause</label>
+                        <select name="damage_cause" class="form-select" id="damagecause">
+                            <option value="">select</option>
+                            <option value="Surge">Surge</option>
+                            <option value="Surge,Wind">Surge,Wind</option>
+                            <option value="Tree">Tree</option>
+                            <option value="Tree,Surge">Tree,Surge</option>
+                            <option value="Wind">Wind</option>
+                            <option value="Wind,Rain">Wind,Rain</option>
+                            <option value="Wind,Surge">Wind,Surge</option>
+                        </select>
+                    </div>
+
+                
+                    <h3>B. Hurricane Building Damage</h3>
+                    <div class="col-sm-3">
+                        <label for="totaldamagerating">Total Damage Rating</label>
+                        <select name="total_damage_rating" class="form-select" id="type">
+                            <option value="">select</option>
+                            <option value="0=No Damage">0: No Damage</option>
+                            <option value="1=Normal">1: Normal</option>
+                            <option value="2=Moderate">2: Moderate</option>
+                            <option value="3=Severe">3: Severe</option>
+                            <option value="X=Total">4: Destroyed</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="structusable">Structure Usable</label>
+                        <select name="structure_usable" class="form-select" id="structusable">
+                            <option value="">select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="roofcoverdmg">Roof cover dmg</label>
+                        <select name="roof_cover_dmg" class="form-select" id="roofcoverdmg">
+                            <option value="">select</option>
+                            <option value="0">0</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.50">0.50</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="roofsheatingdmg">Roof sheathing dmg</label>
+                        <select name="roof_sheathing_dmg" class="form-select" id="roofsheatingdmg">
+                            <option value="">select</option>
+                            <option value="0">0</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.50">0.50</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="roofframingdmg">Roof framing dmg</label>
+                        <select name="roof_framing_dmg" class="form-select" id="roofframingdmg">
+                            <option value="">select</option>
+                            <option value="0">0</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.50">0.50</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="wallcoverdmg">Wall cover dmg</label>
+                        <select name="wall_cover_dmg" class="form-select" id="wallcoverdmg">
+                            <option value="">select</option>
+                            <option value="0">0</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.50">0.50</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="wallshettetingdmg">Wall sheathing dmg</label>
+                        <select name="wall_sheathing_dmg" class="form-select" id="wallshettetingdmg">
+                            <option value="">select</option>
+                            <option value="0">0</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.50">0.50</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="wallframingstructuredmg">Wall framingstructure dmg</label>
+                        <select name="wall_framingstructure_dmg" class="form-select" id="wallframingstructuredmg">
+                            <option value="">select</option>
+                            <option value="0">0</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.50">0.50</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="windowsdmg">Windows dmg</label>
+                        <select name="windows_dmg" class="form-select" id="windowsdmg">
+                            <option value="">select</option>
+                            <option value="0">0</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.50">0.50</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="garagedoordmg">Garage door dmg</label>
+                        <select name="garage_door_dmg" class="form-select" id="garagedoordmg">
+                            <option value="">select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            <option value="n/a">n/a</option>                           
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="patiodoorsdmg">Patio doors dmg</label>
+                        <select name="patio_doors_dmg" class="form-select" id="patiodoorsdmg">
+                            <option value="">select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            <option value="n/a">n/a</option>        
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="entrydoorsdmg">Entry doors dmg</label>
+                        <select name="entry_doors_dmg" class="form-select" id="entrydoorsdmg">
+                            <option value="">select</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+
+                    <h3>C. Primary Label*</h3>
+                    <h6>*Filtered by equal or greather input value </h6>                    
+                    <div class="col-sm-3">
+                        <label for="entity1:people">Entity1: People</label>
+                        <input name="Entity1: People" type="text" class="form-control" id="entity1:people">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="Entity2:Building">Entity2: Building</label>
+                        <input name="Entity2: Building" type="text" class="form-control" id="Entity2:Building">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="Entity3:Vehicle">Entity3: Vehicle</label>
+                        <input name="Entity3: Vehicle" type="text" class="form-control" id="Entity3:Vehicle">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="Hazard1:Hurricane">Hazard1: Hurricane</label>
+                        <input name="Hazard1: Hurricane" type="text" class="form-control" id="Hazard1:Hurricane">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="Hazard2:Flooding">Hazard2: Flooding</label>
+                        <input name="Hazard2: Flooding" type="text" class="form-control" id="Hazard2:Flooding">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="ImageType1:Ground">Image Type1: Ground</label>
+                        <input name="ImageType1: Ground" type="text" class="form-control" id="ImageType1:Ground">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="ImageType2:Aerial">Image Type1: Aerial</label>
+                        <input name="ImageType2: Aerial" type="text" class="form-control" id="ImageType2:Aerial">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="LandUse1:Residential">Land Use1: Residential</label>
+                        <input name="LandUse1: Residential" type="text" class="form-control" id="LandUse1:Residential">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="LandUse2:Commercial">Land Use2: Commercial</label>
+                        <input name="LandUse2: Commercial" type="text" class="form-control" id="LandUse2:Commercial">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="LandUse3:Vegetation">Land Use3: Vegetation</label>
+                        <input name="LandUse3: Vegetation" type="text" class="form-control" id="LandUse3:Vegetation">
+                    </div>
+                </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary mt-4">Search</button>
+                        <button onclick="window.location.reload(true);" class="btn btn-primary mt-4">Reset</button>
+                        <button type="button" class="btn btn-primary mt-4" onclick="selectAllCheckboxes()">Select All</button>
+                        <button type="button" class="btn btn-primary mt-4">Download</button>
+                    </div>
+                    
+                    <script>
+                        function selectAllCheckboxes() {
+                            var checkboxes = document.getElementsByName('selected_images[]');
+                            for (var i = 0; i < checkboxes.length; i++) {
+                                checkboxes[i].checked = true;
+                            }
+                        }
+                    </script>
+
+            </form>
+        </div>
+        <div class="row g-0 mt-2">
+            <div class="col-md-5 border">
+                <div class="d-flex flex-column justify-content-center">
+                    <div class="thumbnail_images">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 image-details">
+                <h2 class="mt-5" style="text-align: center"> Click an image for the details</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript'
+        src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js'></script>
+
+</body>
+</html>
