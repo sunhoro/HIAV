@@ -1,5 +1,4 @@
-# HIAV
-Hurricane Image Analysis Viewer 
+# HIAV (Hurricane Image Analysis Viewer)
 
 ![image](https://github.com/sunhoro/HIAV/assets/58085880/b21f2c0e-128b-4f54-8c61-9be244a5d3cd)
 ![image](https://github.com/sunhoro/HIAV/assets/58085880/76a4f556-9a51-451b-89f1-34f5e54bcad2)
