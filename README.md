@@ -7,6 +7,12 @@ Natural disaster data repositories centralize and manage extensive datasets asso
 
 ![image](https://github.com/sunhoro/HIAV/assets/58085880/76a4f556-9a51-451b-89f1-34f5e54bcad2)
 
+## Acknowledgement
+This material is based upon work supported by FEMA under HMGP DR4488 and the U.S. National Science Foundation under award 2103754, . The views and conclusions contained in this document are those of the authors and should not be interpreted as necessarily representing the official policies, either expressed or implied, of the U.S. National Science Foundation and U.S. Department of Homeland Security.
+
+## Citation
+Ro, S. H., Li, Y., & Gong, J. (2024). A Machine learning approach for Post-Disaster data curation. Advanced Engineering Informatics, 60, 102427.
+
 ## How to run HIAV
 1. Prepare Data
 As seen in the same data folder, you need (a) an image, (b) an image with object detection results, (c) CSV file on manual damage assessment data, and (4) primary labels. For object detection, any model such as Mask RCNN, YOLO, or DETR can be used as long as the proper JSON file is retrieved. Details on processing primary labels will be updated with an upcoming journal paper. Lastly, manual damage assessment data should be prepared in a similar manner.
